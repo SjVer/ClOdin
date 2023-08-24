@@ -20,8 +20,8 @@ exit_on_failure := true
 ```
 ```odin
 // If true, include the standard help, usage and version flags.
-```
 include_standard_flags := true
+```
 ```odin
 // If true, display the standard help, usage and version flags in help messages.
 display_standard_flags_help := true
