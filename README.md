@@ -19,8 +19,8 @@ See https://github.com/odin-lang/Odin/releases/tag/dev-2023-08.
 
 ## Documentation
 
-For the documentation, see [DOCUMENTATION.md].
+For the documentation, see [`DOCUMENTATION.md`](DOCUMENTATION.md).
 
 ## License
 
-For the license, see [LICENSE]. This license must be included in any forks or copies of ClOdin.
+For the license, see [`LICENSE`](LICENSE). This license must be included in any forks or copies of ClOdin.
