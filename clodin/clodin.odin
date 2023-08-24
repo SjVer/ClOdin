@@ -86,36 +86,49 @@ finish :: proc(loc := #caller_location) -> bool {
 	return !failed
 }
 
-// Adds a positional string argument. Any input is accepted as a string.
-pos_string :: proc(placeholder: string, help_message := "", loc := #caller_location) -> string {
+// Positional Arguments
+
+// Add a positional argument of type `$T` that can be parsed by `parsing_proc`.
+pos_arg :: proc(
+	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
+	zero_value: T,
+	placeholder: string,
+	help_message := "",
+	loc := #caller_location,
+) -> T {
 	add_help_entry(.Positional, placeholder, help_message)
-	if found_help_flag {return ""}
+	if found_help_flag {return zero_value}
 
 	if arg, ok := pop_first_positional(); ok {
-		// all input can be a string
-		return arg
+		if val, ok := parsing_proc(arg); ok {
+			return val
+		}
+
+		positional_invalid(placeholder, loc)
+		return zero_value
 	}
 
 	positional_not_supplied(placeholder, loc)
-	return ""
+	return zero_value
+}
+
+// Adds a positional string argument. Any input is accepted as a string.
+pos_string :: proc(placeholder: string, help_message := "", loc := #caller_location) -> string {
+	parsing_proc :: proc(input: string) -> (res: string, ok: bool) {
+		return input, true
+	}
+	return pos_arg(parsing_proc, "", placeholder, help_message, loc)
 }
 
 // Adds a positional integer argument. Any input that is a valid integer in Odin syntax is accepted.
 pos_int :: proc(placeholder: string, help_message := "", loc := #caller_location) -> int {
-	add_help_entry(.Positional, placeholder, help_message)
-	if found_help_flag {return 0}
-
-	if arg, ok := pop_first_positional(); ok {
-		if i, ok := strconv.parse_int(arg); ok {
-			return i
-		}
-		positional_invalid(placeholder, loc)
-		return 0
+	parsing_proc :: proc(input: string) -> (res: int, ok: bool) {
+		return strconv.parse_int(input)
 	}
-
-	positional_not_supplied(placeholder, loc)
-	return 0
+	return pos_arg(parsing_proc, 0, placeholder, help_message, loc)
 }
+
+// Flag and Count Arguments
 
 // Adds a flag argument.
 flag :: proc(name: string, help_message := "") -> bool {
@@ -132,29 +145,41 @@ count :: proc(name: string, help_message := "") -> int {
 	return pop_flags(name)
 }
 
-// Adds an optional string argument. Any value is accepted as a string.
-opt_string :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(string) {
+// Optional Arguments
+
+// Add an optional argument of type `$T` that can be parsed by `parsing_proc`.
+opt_arg :: proc(
+	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
+	zero_value: T,
+	name: string,
+	help_message := "",
+	loc := #caller_location,
+) -> T {
 	add_help_entry(.Optional, name, help_message)
 
 	if val, ok := pop_first_optional(name); ok {
-		// any input can be a string
-		return val
-	}
-
-	return nil
-}
-
-// Adds an optional integer argument. Any input that is a valid integer in Odin syntax is accepted.
-opt_int :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(int) {
-	add_help_entry(.Optional, name, help_message)
-
-	if val, ok := pop_first_optional(name); ok {
-		if i, ok := strconv.parse_int(val); ok {
-			return i
+		if val, ok := parsing_proc(val); ok {
+			return val
 		}
 
 		optional_invalid(name, loc)
 	}
 
-	return nil
+	return zero_value
+}
+
+// Adds an optional string argument. Any value is accepted as a string.
+opt_string :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(string) {
+	parsing_proc :: proc(input: string) -> (res: string, ok: bool) {
+		return input, true
+	}
+	return opt_arg(parsing_proc, "", name, help_message, loc)
+}
+
+// Adds an optional integer argument. Any input that is a valid integer in Odin syntax is accepted.
+opt_int :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(int) {
+	parsing_proc :: proc(input: string) -> (res: int, ok: bool) {
+		return strconv.parse_int(input)
+	}
+	return opt_arg(parsing_proc, 0, name, help_message, loc)
 }

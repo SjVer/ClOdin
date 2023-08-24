@@ -83,6 +83,16 @@ For example, in `my_program.exe foo bar -baz`, "foo" would be the first position
 Positional arguments are consumed in the order of their declaration.
 
 ```odin
+// Add a positional argument of type `$T` that can be parsed by `parsing_proc`.
+pos_arg :: proc(
+	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
+	zero_value: T,
+	placeholder: string,
+	help_message := "",
+	loc := #caller_location,
+) -> T
+```
+```odin
 // Adds a positional string argument. Any input is accepted as a string.
 pos_string :: proc(placeholder: string, help_message := "", loc := #caller_location) -> string
 ```
@@ -108,6 +118,16 @@ count :: proc(name: string, help_message := "") -> int
 Optional arguments are in the format `-name:value` and may appear once anywhere in the array of arguments.
 The value of the argument is the result of parsing the value part of the argument, or the `nil` if the argument does isn't used or parsing failed.
 
+```odin
+// Add an optional argument of type `$T` that can be parsed by `parsing_proc`.
+opt_arg :: proc(
+	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
+	zero_value: T,
+	name: string,
+	help_message := "",
+	loc := #caller_location,
+) -> T
+```
 ```odin
 // Adds an optional string argument. Any value is accepted as a string.
 opt_string :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(string)
