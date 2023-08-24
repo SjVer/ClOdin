@@ -8,13 +8,21 @@ Typical usage of ClOdin starts by setting any behaviour-related variables:
 
 ```odin
 program_name := "clodin_program"
+```
+```odin
 program_description := "a command-line program using clodin"
+```
+```odin
 program_version := "1.0.0"
-
+```
+```odin
 exit_on_failure := true
-
+```
+```odin
 // If true, include the standard help, usage and version flags.
+```
 include_standard_flags := true
+```odin
 // If true, display the standard help, usage and version flags in help messages.
 display_standard_flags_help := true
 ```
@@ -24,7 +32,8 @@ Then, to start the parsing, call `clodin.start` with an array of arguments:
 ```odin
 // Starts the argument parser with the given arguments.
 start :: proc(args: []string)
-
+```
+```odin
 // Alias for `start(os.args[1:])`.
 //
 // The first element of `os.args` is skipped because it is
@@ -57,6 +66,18 @@ Help_Category :: enum {
 // or the name of a flag, count or optional argument otherwise.
 add_help_entry :: proc(category: Help_Category, name, message: string)
 ```
+```odin
+display_short_help :: proc()
+```
+```odin
+display_long_help :: proc()
+```
+```odin
+display_usage :: proc(multiline := false)
+```
+```odin
+display_version :: proc()
+```
 
 ## Positional Arguments
 
@@ -69,7 +90,6 @@ Positional arguments are consumed in the order of their declaration.
 // Adds a positional string argument. Any input is accepted as a string.
 pos_string :: proc(placeholder: string, help_message := "", loc := #caller_location) -> string
 ```
-
 ```odin
 // Adds a positional integer argument. Any input that is a valid integer in Odin syntax is accepted.
 pos_int :: proc(placeholder: string, help_message := "", loc := #caller_location) -> int
@@ -83,7 +103,6 @@ The value of a count argument is the amount of times it appears in the arguments
 ```odin
 flag :: proc(name: string, help_message := "") -> bool
 ```
-
 ```odin
 count :: proc(name: string, help_message := "") -> int
 ```
@@ -97,7 +116,6 @@ The value of the argument is the result of parsing the value part of the argumen
 // Adds an optional string argument. Any value is accepted as a string.
 opt_string :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(string)
 ```
-
 ```odin
 // Adds an optional integer argument. Any input that is a valid integer in Odin syntax is accepted.
 opt_int :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(int)
