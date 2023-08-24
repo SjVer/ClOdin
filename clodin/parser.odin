@@ -1,9 +1,17 @@
 //+private
 package clodin
 
+import "core:runtime"
+import "core:os"
 import "core:strings"
 import "core:fmt"
 import "core:log"
+
+@(private)
+Loc :: runtime.Source_Code_Location
+
+@(private)
+failed := false
 
 arguments: [dynamic]string
 
@@ -19,14 +27,14 @@ pop_first_positional :: proc() -> (arg: string, ok: bool) {
 }
 
 pop_flags :: proc(name: string) -> int {
-    count := 0
+	count := 0
 
 	for i := 0; i < len(arguments); i += 1 {
-        arg := arguments[i]
+		arg := arguments[i]
 
 		if arg[0] == '-' && arg[1:] == name {
-            unordered_remove(&arguments, i)
-            i -= 1
+			unordered_remove(&arguments, i)
+			i -= 1
 			count += 1
 		}
 	}
@@ -35,15 +43,36 @@ pop_flags :: proc(name: string) -> int {
 }
 
 pop_first_optional :: proc(name: string) -> (val: string, ok: bool) {
-    prefix := fmt.aprintf("-%s:", name)
+	prefix := fmt.aprintf("-%s:", name)
 
 	for arg, i in arguments {
 		if len(arg) > len(prefix) && strings.has_prefix(arg, prefix) {
 			unordered_remove(&arguments, i)
 			_, _, val := strings.partition(arg, ":")
-            return val, true
+			return val, true
 		}
 	}
 
 	return "", false
+}
+
+positional_not_supplied :: proc(placeholder: string, loc: Loc) {
+	log.error("got no argument for", placeholder, location = loc)
+	display_usage()
+	failed = true
+	if exit_on_failure {os.exit(1)}
+}
+
+positional_invalid :: proc(placeholder: string, loc: Loc) {
+	log.error("got invalid argument for", placeholder, location = loc)
+	display_short_help()
+	failed = true
+	if exit_on_failure {os.exit(1)}
+}
+
+optional_invalid :: proc(name: string, loc: Loc) {
+	log.error("got invalid argument for", name, location = loc)
+	display_short_help()
+	failed = true
+	if exit_on_failure {os.exit(1)}
 }
