@@ -30,7 +30,7 @@ Then, to start the parsing, call `clodin.start` with an array of arguments:
 start :: proc(args: []string)
 ```
 ```odin
-// Alias for `start(os.args[1:])`.
+// Alias for `clodin.start(os.args[1:])`.
 //
 // The first element of `os.args` is skipped because it is
 // typically the name of the command used to invoke the program.
@@ -40,7 +40,7 @@ start_os_args :: proc()
 When parsing is done, call `clodin.finish` to check that parsing succeeded:
 
 ```odin
-// Finishes the parsing, asserting that there's no input.
+// Finishes the parsing, asserting that there's no input left.
 //
 // Returns `false` if parsing failed or a help or usage message
 // was displayed, and returns `true` when parsing succeeded.

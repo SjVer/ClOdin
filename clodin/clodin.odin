@@ -46,7 +46,7 @@ start :: proc(args: []string) {
 	copy(arguments[:], args[:])
 }
 
-// Alias for `start(os.args[1:])`.
+// Alias for `clodin.start(os.args[1:])`.
 //
 // The first element of `os.args` is skipped because it is
 // typically the name of the command used to invoke the program.
@@ -54,7 +54,7 @@ start_os_args :: proc() {
 	start(os.args[1:])
 }
 
-// Finishes the parsing, asserting that there's no input.
+// Finishes the parsing, asserting that there's no input left.
 //
 // Returns `false` if parsing failed or a help or usage message
 // was displayed, and returns `true` when parsing succeeded.
