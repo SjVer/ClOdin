@@ -10,7 +10,10 @@ program_description := "a command-line program using clodin"
 program_version := "1.0.0"
 
 exit_on_failure := true
+
+// If true, include the standard help, usage and version flags.
 include_standard_flags := true
+// If true, display the standard help, usage and version flags in help messages.
 display_standard_flags_help := true
 
 @(private)
@@ -18,7 +21,7 @@ found_help_flag, found_usage_flag, found_version_flag: bool
 
 // Starts the argument parser with the given arguments.
 start :: proc(args: []string) {
-    failed = false
+	failed = false
 	clear_dynamic_array(&help_entries)
 
 	// chech for "-help" and "-h"
@@ -83,6 +86,7 @@ finish :: proc(loc := #caller_location) -> bool {
 	return !failed
 }
 
+// Adds a positional string argument. Any input is accepted as a string.
 pos_string :: proc(placeholder: string, help_message := "", loc := #caller_location) -> string {
 	add_help_entry(.Positional, placeholder, help_message)
 	if found_help_flag {return ""}
@@ -96,6 +100,7 @@ pos_string :: proc(placeholder: string, help_message := "", loc := #caller_locat
 	return ""
 }
 
+// Adds a positional integer argument. Any input that is a valid integer in Odin syntax is accepted.
 pos_int :: proc(placeholder: string, help_message := "", loc := #caller_location) -> int {
 	add_help_entry(.Positional, placeholder, help_message)
 	if found_help_flag {return 0}
@@ -104,14 +109,15 @@ pos_int :: proc(placeholder: string, help_message := "", loc := #caller_location
 		if i, ok := strconv.parse_int(arg); ok {
 			return i
 		}
-        positional_invalid(placeholder, loc)
-        return 0
+		positional_invalid(placeholder, loc)
+		return 0
 	}
-    
-    positional_not_supplied(placeholder, loc)
-    return 0
+
+	positional_not_supplied(placeholder, loc)
+	return 0
 }
 
+// Adds a flag argument.
 flag :: proc(name: string, help_message := "") -> bool {
 	add_help_entry(.Flag_Or_Count, name, help_message)
 
@@ -119,12 +125,14 @@ flag :: proc(name: string, help_message := "") -> bool {
 	return pop_flags(name) > 0
 }
 
+// Adds a count argument.
 count :: proc(name: string, help_message := "") -> int {
 	add_help_entry(.Flag_Or_Count, name, help_message)
 
 	return pop_flags(name)
 }
 
+// Adds an optional string argument. Any value is accepted as a string.
 opt_string :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(string) {
 	add_help_entry(.Optional, name, help_message)
 
@@ -136,6 +144,7 @@ opt_string :: proc(name: string, help_message := "", loc := #caller_location) ->
 	return nil
 }
 
+// Adds an optional integer argument. Any input that is a valid integer in Odin syntax is accepted.
 opt_int :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(int) {
 	add_help_entry(.Optional, name, help_message)
 

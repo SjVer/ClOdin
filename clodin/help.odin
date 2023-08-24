@@ -21,6 +21,10 @@ help_entries: [dynamic]Help_Entry
 
 display_handle := os.stderr
 
+// Adds an entry to the long help message.
+//
+// `name` should be either a placeholder in case of a positional argument,
+// or the name of a flag, count or optional argument otherwise.
 add_help_entry :: proc(category: Help_Category, name, message: string) {
 	append(&help_entries, Help_Entry{category, name, message})
 }

@@ -7,12 +7,9 @@ import "core:strings"
 import "core:fmt"
 import "core:log"
 
-@(private)
 Loc :: runtime.Source_Code_Location
 
-@(private)
 failed := false
-
 arguments: [dynamic]string
 
 pop_first_positional :: proc() -> (arg: string, ok: bool) {
