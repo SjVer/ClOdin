@@ -19,6 +19,10 @@ Help_Entry :: struct {
 @(private)
 help_entries: [dynamic]Help_Entry
 
+program_name := "clodin_program"
+program_description := "a command-line program using clodin"
+program_version := "1.0.0"
+
 display_handle := os.stderr
 
 // Adds an entry to the long help message.

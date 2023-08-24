@@ -5,10 +5,6 @@ import "core:strconv"
 import "core:log"
 import "core:os"
 
-program_name := "clodin_program"
-program_description := "a command-line program using clodin"
-program_version := "1.0.0"
-
 exit_on_failure := true
 
 // If true, include the standard help, usage and version flags.
@@ -104,6 +100,23 @@ pos_int :: proc(placeholder: string, help_message := "", loc := #caller_location
 	return pos_arg(parsing_proc, 0, placeholder, help_message, loc)
 }
 
+// Adds a positional float argument. Any input that is a valid float in Odin syntax is accepted.
+pos_float :: proc(placeholder: string, help_message := "", loc := #caller_location) -> f64 {
+	parsing_proc :: proc(input: string) -> (res: f64, ok: bool) {
+		return strconv.parse_f64(input)
+	}
+	return pos_arg(parsing_proc, 0.0, placeholder, help_message, loc)
+}
+
+// Adds a positional boolean argument. As input, "1", "t", "T", "true", "TRUE", "True"
+// for `true`, and similar strings for `false` are accepted.
+pos_bool :: proc(placeholder: string, help_message := "", loc := #caller_location) -> bool {
+	parsing_proc :: proc(input: string) -> (res: bool, ok: bool) {
+		return strconv.parse_bool(input)
+	}
+	return pos_arg(parsing_proc, false, placeholder, help_message, loc)
+}
+
 // Flag and Count Arguments
 
 // Adds a flag argument.
@@ -137,4 +150,21 @@ opt_int :: proc(name: string, help_message := "", loc := #caller_location) -> Ma
 		return strconv.parse_int(input)
 	}
 	return opt_arg(parsing_proc, 0, name, help_message, loc)
+}
+
+// Adds an optional float argument. Any input that is a valid float in Odin syntax is accepted.
+opt_float :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(f64) {
+	parsing_proc :: proc(input: string) -> (res: f64, ok: bool) {
+		return strconv.parse_f64(input)
+	}
+	return opt_arg(parsing_proc, 0.0, name, help_message, loc)
+}
+
+// Adds an optional boolean argument. As input, "1", "t", "T", "true", "TRUE", "True"
+// for `true`, and similar strings for `false` are accepted.
+opt_bool :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(bool) {
+	parsing_proc :: proc(input: string) -> (res: bool, ok: bool) {
+		return strconv.parse_bool(input)
+	}
+	return opt_arg(parsing_proc, false, name, help_message, loc)
 }

@@ -15,6 +15,9 @@ program_version := "1.0.0"
 exit_on_failure := true
 ```
 ```odin
+display_handle := os.stderr
+```
+```odin
 // If true, include the standard help, usage and version flags.
 include_standard_flags := true
 ```
