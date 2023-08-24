@@ -101,6 +101,18 @@ pos_string :: proc(placeholder: string, help_message := "", loc := #caller_locat
 pos_int :: proc(placeholder: string, help_message := "", loc := #caller_location) -> int
 ```
 
+A custom positional argument parser might be defined as follows:
+
+```odin
+pos_int :: proc(name: Foo, help_message := "", loc := #caller_location) -> Foo {
+	parsing_proc :: proc(input: string) -> (res: Foo, ok: bool) {
+		// ...
+		return foo, true
+	}
+	return pos_arg(parsing_proc, nil, name, help_message, loc)
+}
+```
+
 ## Flag and Count Arguments
 
 Flags and count arguments are in the format `-name` and may appear zero or more times anywhere in the array of arguments.
@@ -135,4 +147,16 @@ opt_string :: proc(name: string, help_message := "", loc := #caller_location) ->
 ```odin
 // Adds an optional integer argument. Any input that is a valid integer in Odin syntax is accepted.
 opt_int :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(int)
+```
+
+A custom optional argument parser might be defined as follows:
+
+```odin
+opt_int :: proc(name: Foo, help_message := "", loc := #caller_location) -> Maybe(Foo) {
+	parsing_proc :: proc(input: string) -> (res: Foo, ok: bool) {
+		// ...
+		return foo, true
+	}
+	return opt_arg(parsing_proc, nil, name, help_message, loc)
+}
 ```
