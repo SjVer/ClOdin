@@ -41,6 +41,7 @@ pop_flags :: proc(name: string) -> int {
 
 pop_first_optional :: proc(name: string) -> (val: string, ok: bool) {
 	prefix := fmt.aprintf("-%s:", name)
+	defer delete(prefix)
 
 	for arg, i in arguments {
 		if len(arg) > len(prefix) && strings.has_prefix(arg, prefix) {

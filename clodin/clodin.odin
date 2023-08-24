@@ -82,6 +82,7 @@ finish :: proc(loc := #caller_location) -> bool {
 	return !failed
 }
 
+
 // Positional Arguments
 
 // Adds a positional string argument. Any input is accepted as a string.
@@ -117,6 +118,7 @@ pos_bool :: proc(placeholder: string, help_message := "", loc := #caller_locatio
 	return pos_arg(parsing_proc, false, placeholder, help_message, loc)
 }
 
+
 // Flag and Count Arguments
 
 // Adds a flag argument.
@@ -133,6 +135,7 @@ count :: proc(name: string, help_message := "") -> int {
 
 	return pop_flags(name)
 }
+
 
 // Optional Arguments
 
