@@ -8,11 +8,7 @@ Typical usage of ClOdin starts by setting any behaviour-related variables:
 
 ```odin
 program_name := "clodin_program"
-```
-```odin
 program_description := "a command-line program using clodin"
-```
-```odin
 program_version := "1.0.0"
 ```
 ```odin
