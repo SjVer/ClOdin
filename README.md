@@ -4,8 +4,8 @@ A command-line argument parser for Odin
 
 ## Installation
 
-To install ClOdin globally, copy the `clodin` directory into the `vendor` directory of your Odin installation, which is where your `odin.exe` (or `odin`) executable is located.
-You can then import ClOdin using `import "vendor:clodin"`.
+To install ClOdin globally, copy the `clodin` directory into the `shared` directory of your Odin installation, which is where your `odin.exe` (or `odin`) executable is located.
+You can then import ClOdin using `import "shared:clodin"`.
 
 To install ClOdin for just one project, copy the `clodin` directory into the directory of your project.
 You can then import ClOdin using `import "clodin"`.
