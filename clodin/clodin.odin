@@ -61,17 +61,17 @@ finish :: proc(loc := #caller_location) -> bool {
 			add_help_entry(
 				.Flag_Or_Count,
 				"h, -help",
-				"Display this help message.",
+				"Display this help message",
 			)
 			add_help_entry(
 				.Flag_Or_Count,
 				"u, -usage",
-				"Display a short usage message.",
+				"Display a short usage message",
 			)
 			add_help_entry(
 				.Flag_Or_Count,
 				"v, -version",
-				"Display version information.",
+				"Display version information",
 			)
 		}
 		display_long_help()
