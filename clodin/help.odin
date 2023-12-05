@@ -22,6 +22,7 @@ help_entries: [dynamic]Help_Entry
 program_name := "clodin_program"
 program_description := "a command-line program using clodin"
 program_version := "1.0.0"
+program_information := "See https://github.com/SjVer/ClOdin for more information."
 
 display_handle := os.stderr
 
@@ -69,7 +70,7 @@ display_long_help :: proc() {
 		fmt.fprintf(display_handle, "\t\t%#v\n\n", entry.message)
 	}
 
-	if len(opt_entries) == 0 {return}
+	if len(opt_entries) == 0 do return
 
 	// flags, counts and optionals
 	fmt.fprintln(display_handle, "Flags:")
@@ -87,6 +88,11 @@ display_long_help :: proc() {
 			}
 			fmt.fprintln(display_handle)
 		}
+	}
+
+	// long help
+	if program_information != "" {
+		fmt.fprintf(display_handle, "%s\n", program_information)
 	}
 }
 

@@ -10,6 +10,7 @@ Typical usage of ClOdin starts by setting any behaviour-related variables:
 program_name := "clodin_program"
 program_description := "a command-line program using clodin"
 program_version := "1.0.0"
+program_information := "See https://github.com/SjVer/ClOdin for more information."
 ```
 ```odin
 exit_on_failure := true
