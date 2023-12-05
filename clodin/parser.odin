@@ -76,6 +76,7 @@ optional_invalid :: proc(name: string, loc: Loc) {
 }
 
 // Add a positional argument of type `$T` that can be parsed by `parsing_proc`.
+@export
 pos_arg :: proc(
 	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
 	zero_value: T,
@@ -100,6 +101,7 @@ pos_arg :: proc(
 }
 
 // Add an optional argument of type `$T` that can be parsed by `parsing_proc`.
+@export
 opt_arg :: proc(
 	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
 	zero_value: T,
