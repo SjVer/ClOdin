@@ -106,6 +106,30 @@ finish :: proc(loc := #caller_location) -> bool {
 
 // Positional Arguments
 
+// Add a positional argument of type `$T` that can be parsed by `parsing_proc`.
+pos_arg :: proc(
+	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
+	zero_value: T,
+	placeholder: string,
+	help_message := "",
+	loc := #caller_location,
+) -> T {
+	add_help_entry(.Positional, placeholder, help_message)
+	if found_help_flag {return zero_value}
+
+	if arg, ok := pop_first_positional(); ok {
+		if val, ok := parsing_proc(arg); ok {
+			return val
+		}
+
+		positional_invalid(placeholder, loc)
+		return zero_value
+	}
+
+	positional_not_supplied(placeholder, loc)
+	return zero_value
+}
+
 // Adds a positional string argument. Any input is accepted as a string.
 pos_string :: proc(
 	placeholder: string,
@@ -175,6 +199,27 @@ count :: proc(name: string, help_message := "") -> int {
 
 
 // Optional Arguments
+
+// Add an optional argument of type `$T` that can be parsed by `parsing_proc`.
+opt_arg :: proc(
+	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
+	zero_value: T,
+	name: string,
+	help_message := "",
+	loc := #caller_location,
+) -> T {
+	add_help_entry(.Optional, name, help_message)
+
+	if val, ok := pop_first_optional(name); ok {
+		if val, ok := parsing_proc(val); ok {
+			return val
+		}
+
+		optional_invalid(name, loc)
+	}
+
+	return zero_value
+}
 
 // Adds an optional string argument. Any value is accepted as a string.
 opt_string :: proc(
