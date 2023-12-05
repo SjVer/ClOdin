@@ -98,7 +98,9 @@ finish :: proc(loc := #caller_location) -> bool {
 
 	if len(arguments) > 0 {
 		log.error("unexpected arguments:", arguments, location = loc)
-		return false
+		display_short_help()
+		failed = true
+		if exit_on_failure do os.exit(1)
 	}
 	return !failed
 }
