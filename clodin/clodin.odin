@@ -1,9 +1,9 @@
 package clodin
 
-import "core:strings"
-import "core:strconv"
 import "core:log"
 import "core:os"
+import "core:strconv"
+import "core:strings"
 
 exit_on_failure := true
 
@@ -28,12 +28,12 @@ start :: proc(args: []string) {
 
 		for arg in args {
 			switch arg {
-			case "-h", "-help":
-				found_help_flag = true
-			case "-u", "-usage":
-				found_usage_flag = true
-			case "-v", "-version":
-				found_version_flag = true
+				case "-h", "-help":
+					found_help_flag = true
+				case "-u", "-usage":
+					found_usage_flag = true
+				case "-v", "-version":
+					found_version_flag = true
 			}
 		}
 	}
@@ -58,20 +58,41 @@ finish :: proc(loc := #caller_location) -> bool {
 	// check standard flags (can only be true if `include_standard_flags` is set)
 	if found_help_flag {
 		if display_standard_flags_help {
-			add_help_entry(.Flag_Or_Count, "h, -help", "Display this help message.")
-			add_help_entry(.Flag_Or_Count, "u, -usage", "Display a short usage message.")
-			add_help_entry(.Flag_Or_Count, "v, -version", "Display version information.")
+			add_help_entry(
+				.Flag_Or_Count,
+				"h, -help",
+				"Display this help message.",
+			)
+			add_help_entry(
+				.Flag_Or_Count,
+				"u, -usage",
+				"Display a short usage message.",
+			)
+			add_help_entry(
+				.Flag_Or_Count,
+				"v, -version",
+				"Display version information.",
+			)
 		}
 		display_long_help()
-		log.debug("clodin.finish returning false because of help message", location = loc)
+		log.debug(
+			"clodin.finish returning false because of help message",
+			location = loc,
+		)
 		return false
 	} else if found_usage_flag {
 		display_usage()
-		log.debug("clodin.finish returning false because of usage message", location = loc)
+		log.debug(
+			"clodin.finish returning false because of usage message",
+			location = loc,
+		)
 		return false
 	} else if found_version_flag {
 		display_version()
-		log.debug("clodin.finish returning false because of version message", location = loc)
+		log.debug(
+			"clodin.finish returning false because of version message",
+			location = loc,
+		)
 		return false
 	}
 
@@ -86,7 +107,11 @@ finish :: proc(loc := #caller_location) -> bool {
 // Positional Arguments
 
 // Adds a positional string argument. Any input is accepted as a string.
-pos_string :: proc(placeholder: string, help_message := "", loc := #caller_location) -> string {
+pos_string :: proc(
+	placeholder: string,
+	help_message := "",
+	loc := #caller_location,
+) -> string {
 	parsing_proc :: proc(input: string) -> (res: string, ok: bool) {
 		return input, true
 	}
@@ -94,7 +119,11 @@ pos_string :: proc(placeholder: string, help_message := "", loc := #caller_locat
 }
 
 // Adds a positional integer argument. Any input that is a valid integer in Odin syntax is accepted.
-pos_int :: proc(placeholder: string, help_message := "", loc := #caller_location) -> int {
+pos_int :: proc(
+	placeholder: string,
+	help_message := "",
+	loc := #caller_location,
+) -> int {
 	parsing_proc :: proc(input: string) -> (res: int, ok: bool) {
 		return strconv.parse_int(input)
 	}
@@ -102,7 +131,11 @@ pos_int :: proc(placeholder: string, help_message := "", loc := #caller_location
 }
 
 // Adds a positional float argument. Any input that is a valid float in Odin syntax is accepted.
-pos_float :: proc(placeholder: string, help_message := "", loc := #caller_location) -> f64 {
+pos_float :: proc(
+	placeholder: string,
+	help_message := "",
+	loc := #caller_location,
+) -> f64 {
 	parsing_proc :: proc(input: string) -> (res: f64, ok: bool) {
 		return strconv.parse_f64(input)
 	}
@@ -111,7 +144,11 @@ pos_float :: proc(placeholder: string, help_message := "", loc := #caller_locati
 
 // Adds a positional boolean argument. As input, "1", "t", "T", "true", "TRUE", "True"
 // for `true`, and similar strings for `false` are accepted.
-pos_bool :: proc(placeholder: string, help_message := "", loc := #caller_location) -> bool {
+pos_bool :: proc(
+	placeholder: string,
+	help_message := "",
+	loc := #caller_location,
+) -> bool {
 	parsing_proc :: proc(input: string) -> (res: bool, ok: bool) {
 		return strconv.parse_bool(input)
 	}
@@ -140,7 +177,11 @@ count :: proc(name: string, help_message := "") -> int {
 // Optional Arguments
 
 // Adds an optional string argument. Any value is accepted as a string.
-opt_string :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(string) {
+opt_string :: proc(
+	name: string,
+	help_message := "",
+	loc := #caller_location,
+) -> Maybe(string) {
 	parsing_proc :: proc(input: string) -> (res: string, ok: bool) {
 		return input, true
 	}
@@ -148,7 +189,11 @@ opt_string :: proc(name: string, help_message := "", loc := #caller_location) ->
 }
 
 // Adds an optional integer argument. Any input that is a valid integer in Odin syntax is accepted.
-opt_int :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(int) {
+opt_int :: proc(
+	name: string,
+	help_message := "",
+	loc := #caller_location,
+) -> Maybe(int) {
 	parsing_proc :: proc(input: string) -> (res: int, ok: bool) {
 		return strconv.parse_int(input)
 	}
@@ -156,7 +201,11 @@ opt_int :: proc(name: string, help_message := "", loc := #caller_location) -> Ma
 }
 
 // Adds an optional float argument. Any input that is a valid float in Odin syntax is accepted.
-opt_float :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(f64) {
+opt_float :: proc(
+	name: string,
+	help_message := "",
+	loc := #caller_location,
+) -> Maybe(f64) {
 	parsing_proc :: proc(input: string) -> (res: f64, ok: bool) {
 		return strconv.parse_f64(input)
 	}
@@ -165,7 +214,11 @@ opt_float :: proc(name: string, help_message := "", loc := #caller_location) -> 
 
 // Adds an optional boolean argument. As input, "1", "t", "T", "true", "TRUE", "True"
 // for `true`, and similar strings for `false` are accepted.
-opt_bool :: proc(name: string, help_message := "", loc := #caller_location) -> Maybe(bool) {
+opt_bool :: proc(
+	name: string,
+	help_message := "",
+	loc := #caller_location,
+) -> Maybe(bool) {
 	parsing_proc :: proc(input: string) -> (res: bool, ok: bool) {
 		return strconv.parse_bool(input)
 	}

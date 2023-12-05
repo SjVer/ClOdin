@@ -14,8 +14,8 @@ You can then import ClOdin using `import "clodin"`.
 
 ## Version
 
-The latest version of ClOdin is written for Odin version `dev-2023-08-nightly:9453b238`, and should be compatible with any version of Odin that is backwards compatible to that version.
-See https://github.com/odin-lang/Odin/releases/tag/dev-2023-08.
+The latest version of ClOdin is written for Odin version `dev-2023-11-nightly:ef5eb4b6`, and should be compatible with any version of Odin that is backwards compatible to that version.
+See https://github.com/odin-lang/Odin/releases/tag/dev-2023-11.
 
 ## Documentation
 

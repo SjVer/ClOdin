@@ -36,9 +36,9 @@ add_help_entry :: proc(category: Help_Category, name, message: string) {
 display_short_help :: proc() {
 	fmt.fprintln(display_handle, program_name, "-", program_description)
 	fmt.fprintln(display_handle)
-	
+
 	display_usage()
-	
+
 	if include_standard_flags {
 		fmt.fprintln(display_handle)
 		fmt.fprintln(display_handle, "For more information try -help")
@@ -49,7 +49,7 @@ display_long_help :: proc() {
 	fmt.fprintln(display_handle, program_name, "-", program_description)
 
 	// sort entries
-	pos_entries, opt_entries : [dynamic]Help_Entry
+	pos_entries, opt_entries: [dynamic]Help_Entry
 	for entry in help_entries {
 		if entry.category == .Positional {
 			append(&pos_entries, entry)
@@ -61,7 +61,7 @@ display_long_help :: proc() {
 	// usage
 	display_usage(true)
 	fmt.fprintln(display_handle)
-	
+
 	// positionals
 	fmt.fprintln(display_handle, "Arguments:")
 	for entry in pos_entries {
@@ -80,8 +80,7 @@ display_long_help :: proc() {
 				fmt.fprintf(display_handle, "\t\t%#v\n", entry.message)
 			}
 			fmt.fprintln(display_handle)
-		}
-		else if entry.category == .Optional {
+		} else if entry.category == .Optional {
 			fmt.fprintf(display_handle, "\t-%s:...\n", entry.name)
 			if len(entry.message) > 0 {
 				fmt.fprintf(display_handle, "\t\t%#v\n", entry.message)

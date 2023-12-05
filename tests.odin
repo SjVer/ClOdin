@@ -1,26 +1,27 @@
 package test
 
-import "core:testing"
+import "clodin"
 import "core:log"
 import "core:os"
-import "clodin"
+import "core:testing"
 
 logger := log.create_console_logger(
-	opt = {.Terminal_Color, .Level, .Short_File_Path, .Line}
+	opt = {.Terminal_Color, .Level, .Short_File_Path, .Line},
 )
 
-@test
-test_all :: proc(t: ^testing.T) {
+@(test)
+test_all :: proc(t: ^testing.T) 
+{
 	context.logger = logger
 	args := []string{"foo", "-bar", "-faz", "-faz", "-faz", "-baz:123"}
 
 	clodin.start(args)
-	
+
 	foo := clodin.pos_string("FOO")
 	bar := clodin.flag("bar")
 	faz := clodin.count("faz")
 	baz := clodin.opt_int("baz")
-	
+
 	testing.expect(t, clodin.finish())
 	testing.expect_value(t, foo, "foo")
 	testing.expect_value(t, bar, true)
@@ -28,8 +29,9 @@ test_all :: proc(t: ^testing.T) {
 	testing.expect_value(t, faz, 3)
 }
 
-@test
-test_help :: proc(t: ^testing.T) {
+@(test)
+test_help :: proc(t: ^testing.T) 
+{
 	context.logger = logger
 
 	clodin.start({"-help"})
@@ -42,8 +44,9 @@ test_help :: proc(t: ^testing.T) {
 	testing.expect(t, !clodin.finish())
 }
 
-@test
-test_invalid_pos :: proc(t: ^testing.T) {
+@(test)
+test_invalid_pos :: proc(t: ^testing.T) 
+{
 	context.logger = logger
 
 	clodin.exit_on_failure = false

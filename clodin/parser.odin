@@ -1,11 +1,11 @@
 //+private
 package clodin
 
-import "core:runtime"
-import "core:os"
-import "core:strings"
 import "core:fmt"
 import "core:log"
+import "core:os"
+import "core:runtime"
+import "core:strings"
 
 Loc :: runtime.Source_Code_Location
 
@@ -58,21 +58,21 @@ positional_not_supplied :: proc(placeholder: string, loc: Loc) {
 	log.error("got no argument for", placeholder, location = loc)
 	display_usage()
 	failed = true
-	if exit_on_failure {os.exit(1)}
+	if exit_on_failure do os.exit(1)
 }
 
 positional_invalid :: proc(placeholder: string, loc: Loc) {
 	log.error("got invalid argument for", placeholder, location = loc)
 	display_short_help()
 	failed = true
-	if exit_on_failure {os.exit(1)}
+	if exit_on_failure do os.exit(1)
 }
 
 optional_invalid :: proc(name: string, loc: Loc) {
 	log.error("got invalid argument for", name, location = loc)
 	display_short_help()
 	failed = true
-	if exit_on_failure {os.exit(1)}
+	if exit_on_failure do os.exit(1)
 }
 
 // Add a positional argument of type `$T` that can be parsed by `parsing_proc`.
