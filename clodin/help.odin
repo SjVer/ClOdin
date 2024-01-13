@@ -96,8 +96,8 @@ display_long_help :: proc() {
 	}
 }
 
-display_usage :: proc(multiline := false) {
-	if multiline {
+display_usage :: proc(in_help_message := false) {
+	if in_help_message {
 		fmt.fprintln(display_handle, "Usage:")
 		fmt.fprint(display_handle, "\t")
 	} else {
@@ -117,6 +117,11 @@ display_usage :: proc(multiline := false) {
 		fmt.fprintf(display_handle, " [options]")
 	}
 	fmt.fprintln(display_handle)
+	
+	if !in_help_message && include_standard_flags {
+		fmt.fprintln(display_handle)
+		fmt.fprintln(display_handle, "For more information try -help")
+	}
 }
 
 display_version :: proc() {

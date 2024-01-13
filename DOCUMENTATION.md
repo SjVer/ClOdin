@@ -73,7 +73,7 @@ display_short_help :: proc()
 display_long_help :: proc()
 ```
 ```odin
-display_usage :: proc(multiline := false)
+display_usage :: proc(in_help_message := false)
 ```
 ```odin
 display_version :: proc()
