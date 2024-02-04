@@ -231,7 +231,7 @@ opt_string :: proc(
 	parsing_proc :: proc(input: string) -> (res: string, ok: bool) {
 		return input, true
 	}
-	return opt_arg(parsing_proc, "", name, help_message, loc)
+	return opt_arg(parsing_proc, name, help_message, loc)
 }
 
 // Adds an optional integer argument. Any input that is a valid integer in Odin syntax is accepted.
@@ -243,7 +243,7 @@ opt_int :: proc(
 	parsing_proc :: proc(input: string) -> (res: int, ok: bool) {
 		return strconv.parse_int(input)
 	}
-	return opt_arg(parsing_proc, 0, name, help_message, loc)
+	return opt_arg(parsing_proc, name, help_message, loc)
 }
 
 // Adds an optional float argument. Any input that is a valid float in Odin syntax is accepted.
@@ -255,7 +255,7 @@ opt_float :: proc(
 	parsing_proc :: proc(input: string) -> (res: f64, ok: bool) {
 		return strconv.parse_f64(input)
 	}
-	return opt_arg(parsing_proc, 0.0, name, help_message, loc)
+	return opt_arg(parsing_proc, name, help_message, loc)
 }
 
 // Adds an optional boolean argument. As input, "1", "t", "T", "true", "TRUE", "True"
@@ -268,5 +268,5 @@ opt_bool :: proc(
 	parsing_proc :: proc(input: string) -> (res: bool, ok: bool) {
 		return strconv.parse_bool(input)
 	}
-	return opt_arg(parsing_proc, false, name, help_message, loc)
+	return opt_arg(parsing_proc, name, help_message, loc)
 }
