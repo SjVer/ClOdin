@@ -2,6 +2,7 @@ package clodin
 
 import "core:fmt"
 import "core:os"
+import "core:strings"
 
 Help_Category :: enum {
 	Positional,
@@ -26,6 +27,12 @@ program_information := "See https://github.com/SjVer/ClOdin for more information
 
 display_handle := os.stderr
 
+@(private)
+indent_msg :: proc(msg: string) -> string {
+	msg, _ := strings.replace(msg, "\n", "\n\t\t", -1)
+	return msg
+}
+
 // Adds an entry to the long help message.
 //
 // `name` should be either a placeholder in case of a positional argument,
@@ -38,7 +45,7 @@ display_short_help :: proc() {
 	fmt.fprintln(display_handle, program_name, "-", program_description)
 	fmt.fprintln(display_handle)
 
-	display_usage()
+	display_usage(true, false)
 
 	if include_standard_flags {
 		fmt.fprintln(display_handle)
@@ -67,7 +74,13 @@ display_long_help :: proc() {
 	fmt.fprintln(display_handle, "Arguments:")
 	for entry in pos_entries {
 		fmt.fprintf(display_handle, "\t<%s>\n", entry.name)
-		fmt.fprintf(display_handle, "\t\t%#v\n\n", entry.message)
+		if len(entry.message) > 0 {
+			fmt.fprintf(
+				display_handle, "\t\t%s\n\n", 
+				indent_msg(entry.message)
+			)
+		}
+		else do fmt.fprintln(display_handle)
 	}
 
 	if len(opt_entries) == 0 do return
@@ -78,13 +91,19 @@ display_long_help :: proc() {
 		if entry.category == .Flag_Or_Count {
 			fmt.fprintf(display_handle, "\t-%s\n", entry.name)
 			if len(entry.message) > 0 {
-				fmt.fprintf(display_handle, "\t\t%#v\n", entry.message)
+				fmt.fprintf(
+					display_handle, "\t\t%#v\n", 
+					indent_msg(entry.message)
+				)
 			}
 			fmt.fprintln(display_handle)
 		} else if entry.category == .Optional {
 			fmt.fprintf(display_handle, "\t-%s:...\n", entry.name)
 			if len(entry.message) > 0 {
-				fmt.fprintf(display_handle, "\t\t%#v\n", entry.message)
+				fmt.fprintf(
+					display_handle, "\t\t%#v\n", 
+					indent_msg(entry.message)
+				)
 			}
 			fmt.fprintln(display_handle)
 		}
@@ -96,12 +115,12 @@ display_long_help :: proc() {
 	}
 }
 
-display_usage :: proc(in_help_message := false) {
-	if in_help_message {
+display_usage :: proc(compact := false, include_help_hint := false) {
+	if compact {
+		fmt.fprint(display_handle, "Usage:")
+	} else {
 		fmt.fprintln(display_handle, "Usage:")
 		fmt.fprint(display_handle, "\t")
-	} else {
-		fmt.fprint(display_handle, "Usage:")
 	}
 	fmt.fprintf(display_handle, " %s", program_name)
 
@@ -118,7 +137,7 @@ display_usage :: proc(in_help_message := false) {
 	}
 	fmt.fprintln(display_handle)
 	
-	if !in_help_message && include_standard_flags {
+	if include_help_hint && include_standard_flags {
 		fmt.fprintln(display_handle)
 		fmt.fprintln(display_handle, "For more information try -help")
 	}

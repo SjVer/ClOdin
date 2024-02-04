@@ -73,7 +73,7 @@ display_short_help :: proc()
 display_long_help :: proc()
 ```
 ```odin
-display_usage :: proc(in_help_message := false)
+display_usage :: proc(compact := false, include_help_hint := false)
 ```
 ```odin
 display_version :: proc()
@@ -87,14 +87,13 @@ For example, in `my_program.exe foo bar -baz`, "foo" would be the first position
 Positional arguments are consumed in the order of their declaration.
 
 ```odin
-// Add a positional argument of type `$T` that can be parsed by `parsing_proc`.
-pos_arg :: proc(
+// Add an optional argument of type `Maybe(T)` that can be parsed by `parsing_proc`.
+opt_arg :: proc(
 	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
-	zero_value: T,
-	placeholder: string,
+	name: string,
 	help_message := "",
 	loc := #caller_location,
-) -> T
+) -> Maybe(T)
 ```
 ```odin
 // Adds a positional string argument. Any input is accepted as a string.

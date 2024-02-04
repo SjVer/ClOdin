@@ -202,14 +202,13 @@ count :: proc(name: string, help_message := "") -> int {
 
 // Optional Arguments
 
-// Add an optional argument of type `$T` that can be parsed by `parsing_proc`.
+// Add an optional argument of type `Maybe(T)` that can be parsed by `parsing_proc`.
 opt_arg :: proc(
 	parsing_proc: proc(input: string) -> (res: $T, ok: bool),
-	zero_value: T,
 	name: string,
 	help_message := "",
 	loc := #caller_location,
-) -> T {
+) -> Maybe(T) {
 	add_help_entry(.Optional, name, help_message)
 
 	if val, ok := pop_first_optional(name); ok {
@@ -220,7 +219,7 @@ opt_arg :: proc(
 		optional_invalid(name, loc)
 	}
 
-	return zero_value
+	return nil
 }
 
 // Adds an optional string argument. Any value is accepted as a string.
