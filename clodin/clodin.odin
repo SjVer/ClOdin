@@ -270,3 +270,22 @@ opt_bool :: proc(
 	}
 	return opt_arg(parsing_proc, name, help_message, loc)
 }
+
+// Adds a parser for multiple (optional) string arguments.
+multiple_strings :: proc(
+	name: string,
+	help_message := "",
+	loc := #caller_location,
+) -> [dynamic]string {
+	add_help_entry(.Optional, name, help_message)
+
+	args : [dynamic]string = {}
+	for {
+		if val, ok := pop_first_optional(name); ok {
+			append(&args, val)
+		}
+		else do break
+	}
+
+	return args
+}
